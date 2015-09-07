@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by adobrianskiy on 04.09.15.
  */
+
 public class StopWords {
     private static List<String> words = new ArrayList<String>();
     static {
@@ -31,11 +32,12 @@ public class StopWords {
     public static List<String> removeStopWords(List<String> tokens){
         List<String> res = new ArrayList<String>();
         for(String token: tokens){
-            if(words.contains(token)){
-                //System.out.println("Stop word: " + token);
-            } else {
+            if(!words.contains(token)){
                 res.add(token);
             }
+//            else {
+//                System.out.println("Stop word: " + token);
+//            }
         }
         return res;
     }

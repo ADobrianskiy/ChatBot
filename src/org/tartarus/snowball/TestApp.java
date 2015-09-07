@@ -32,8 +32,7 @@ public class TestApp {
 	reader = new BufferedReader(reader);
 
 	StringBuffer input = new StringBuffer();
-
-        OutputStream outstream;
+		OutputStream outstream;
 
 	if (args.length > 2) {
             if (args.length >= 4 && args[2].equals("-o")) {

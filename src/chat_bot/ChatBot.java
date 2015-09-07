@@ -13,14 +13,15 @@ import java.util.StringTokenizer;
  * Created by adobrianskiy on 04.09.15.
  */
 public class ChatBot {
+    private String name;
 
-    public ChatBot(){
+    public ChatBot(String name){
+        this.name = name;
         System.out.println("Chat bot created");
     }
 
     public String getReply(String text){
-        System.out.println("Human: text");
-        List<String> words = getMainWords(text);
+        List<String> words = getMainWords(text.replaceAll("\\W", " "));
         SnowballStemmer stemmer = new russianStemmer();
         List<String> stemmed = new ArrayList<String>();
 
@@ -31,17 +32,18 @@ public class ChatBot {
             }
         }
 
-        System.out.println("Stemmed: " + stemmed);
-
-        return "Bot: Answer";
+        //System.out.println("Stemmed: " + stemmed);
+        return name + ": Answer";
     }
 
     private List<String> getMainWords(String text){
         StringTokenizer tz = new StringTokenizer(text);
         List<String> tokens = new ArrayList<String>();
+
         while(tz.hasMoreTokens()) {
-            tokens.add(tz.nextToken());
+            tokens.add(tz.nextToken().toLowerCase());
         }
+
         return StopWords.removeStopWords(tokens);
     }
 }
