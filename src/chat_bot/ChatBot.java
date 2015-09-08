@@ -1,18 +1,21 @@
 package chat_bot;
 
 
+import chat_bot.knowlages.KnowlageManager;
 import chat_bot.stopwords.StopWords;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.russianStemmer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 /**
  * Created by adobrianskiy on 04.09.15.
  */
 public class ChatBot {
+    private List<String> replies = new ArrayList<String>();
     private String name;
 
     public ChatBot(String name){
@@ -21,7 +24,7 @@ public class ChatBot {
     }
 
     public String getReply(String text){
-        List<String> words = getMainWords(text.replaceAll("\\W", " "));
+                List<String> words = getMainWords(text.replaceAll("\\W", " "));
         SnowballStemmer stemmer = new russianStemmer();
         List<String> stemmed = new ArrayList<String>();
 
@@ -31,9 +34,31 @@ public class ChatBot {
                 stemmed.add(stemmer.getCurrent());
             }
         }
+        String reply = "";
 
-        //System.out.println("Stemmed: " + stemmed);
-        return name + ": Answer";
+        List<String> possible_replies = KnowlageManager.INSTANCE.getReplies(stemmed);
+
+        reply = chooseReply(possible_replies);
+
+        if(reply != null) {
+            replies.add(reply);
+        }
+
+        if(replies.size() <= 1){
+            String greetings = KnowlageManager.INSTANCE.getGreeting();
+            reply = greetings + reply;
+        }
+
+        return name + ": " + reply;
+    }
+
+    private String chooseReply(List<String> possible_replies) {
+        if(possible_replies == null || possible_replies.size() == 0) {
+            return null;
+        }
+
+        Random r = new Random();
+        return possible_replies.get(r.nextInt(possible_replies.size()));
     }
 
     private List<String> getMainWords(String text){
