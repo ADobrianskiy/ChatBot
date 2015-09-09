@@ -24,7 +24,7 @@ public class ChatBot {
     }
 
     public String getReply(String text){
-                List<String> words = getMainWords(text.replaceAll("\\W", " "));
+        List<String> words = getMainWords(text.replaceAll("[^а-яa-Я ]", ""));
         SnowballStemmer stemmer = new russianStemmer();
         List<String> stemmed = new ArrayList<String>();
 
@@ -34,7 +34,7 @@ public class ChatBot {
                 stemmed.add(stemmer.getCurrent());
             }
         }
-        String reply = "";
+        String reply;
 
         List<String> possible_replies = KnowlageManager.INSTANCE.getReplies(stemmed);
 
