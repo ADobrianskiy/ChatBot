@@ -19,7 +19,7 @@ public class Main {
             System.out.print("Your message: ");
             try {
                 message = input.readLine();
-                System.out.println(bot.getReply(message));
+                System.out.println(bot.getAnswer(message));
 
                 if(message.toLowerCase().contains("до встречи")){
                     break;

@@ -127,12 +127,11 @@ public class KnowlageManager {
 //        System.out.println("Job done! Greetings added");
     }
 
+    public String getJoke () {
+        return jokes.get(random.nextInt(jokes.size()));
+    }
     public List<String> getReplies(List<String> key_words) {
         List<String> res = new ArrayList<String>();
-        if(key_words == null || key_words.size() == 0) {
-            String reply = jokes.get(random.nextInt(jokes.size()));
-            res.add(reply);
-        }
 
         return res;
     }

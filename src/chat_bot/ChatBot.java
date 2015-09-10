@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by adobrianskiy on 04.09.15.
@@ -23,7 +25,32 @@ public class ChatBot {
         System.out.println("Chat bot created");
     }
 
-    public String getReply(String text){
+    public String getAnswer(String text){
+        String res = "";
+        Pattern re = Pattern.compile("[^.!?\\s][^.!?]*(?:[.!?](?!['\"]?\\s|$)[^.!?]*)*[.!?]?['\"]?(?=\\s|$)", Pattern.MULTILINE | Pattern.COMMENTS);
+        Matcher reMatcher = re.matcher(text);
+        while (reMatcher.find()) {
+            String sentence = reMatcher.group();
+            String reply = getReply(sentence);
+            if(reply != null && !reply.equals("")){
+                res += reply;
+            }
+        }
+
+        if(res.equals("")) {
+            res = KnowlageManager.INSTANCE.getJoke();
+        }
+
+        if(replies.size() < 1){
+            String greetings = KnowlageManager.INSTANCE.getGreeting();
+            res = greetings + res;
+        }
+
+        replies.add(res);
+        return name + ": " + res;
+    }
+
+    private String getReply(String text){
         List<String> words = getMainWords(text.replaceAll("[^а-яa-Я ]", ""));
         SnowballStemmer stemmer = new russianStemmer();
         List<String> stemmed = new ArrayList<String>();
@@ -34,24 +61,13 @@ public class ChatBot {
                 stemmed.add(stemmer.getCurrent());
             }
         }
-        String reply;
 
         KnowlageManager.INSTANCE.setStemmedWords((ArrayList<String>) stemmed);
 
         List<String> possible_replies = KnowlageManager.INSTANCE.getReplies(stemmed);
+        String reply = chooseReply(possible_replies);
 
-        reply = chooseReply(possible_replies);
-
-        if(reply != null) {
-            replies.add(reply);
-        }
-
-        if(replies.size() <= 1){
-            String greetings = KnowlageManager.INSTANCE.getGreeting();
-            reply = greetings + reply;
-        }
-
-        return name + ": " + reply;
+        return reply;
     }
 
     private String chooseReply(List<String> possible_replies) {
