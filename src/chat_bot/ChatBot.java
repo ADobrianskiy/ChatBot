@@ -36,6 +36,8 @@ public class ChatBot {
         }
         String reply;
 
+        KnowlageManager.INSTANCE.setStemmedWords((ArrayList<String>) stemmed);
+
         List<String> possible_replies = KnowlageManager.INSTANCE.getReplies(stemmed);
 
         reply = chooseReply(possible_replies);

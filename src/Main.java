@@ -15,6 +15,7 @@ public class Main {
         InputStreamReader ir = new InputStreamReader(System.in);
         BufferedReader input = new BufferedReader(ir);
         while(true){
+
             System.out.print("Your message: ");
             try {
                 message = input.readLine();
